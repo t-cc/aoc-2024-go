@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/wlchs/advent_of_code_go_template/days/day_0"
+	"github.com/wlchs/advent_of_code_go_template/days/day_01"
 )
 
 // main entry point
@@ -13,5 +14,7 @@ func main() {
 	switch *day {
 	case "0":
 		day_0.Run()
+	case "1":
+		day_01.Run()
 	}
 }

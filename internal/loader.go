@@ -1,4 +1,4 @@
-package loader
+package internal
 
 import (
 	"bufio"
@@ -8,16 +8,21 @@ import (
 
 // LoadInputLines loads a text file from the given path as a string slice.
 func LoadInputLines(path string) []string {
+	if path == "" {
+		fmt.Println("missing input path")
+		os.Exit(1)
+	}
+
 	file, err := os.Open(path)
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			fmt.Printf("failed to close file \"%s\"", path)
+			fmt.Printf("failed to close file \"%s\"\n", path)
 		}
 	}(file)
 
 	if err != nil {
-		fmt.Printf("failed to load input from \"%s\"", path)
+		fmt.Printf("failed to load input from \"%s\"\n", path)
 	}
 
 	var lines []string
@@ -27,7 +32,7 @@ func LoadInputLines(path string) []string {
 	}
 
 	if err := scanner.Err(); err != nil {
-		fmt.Printf("failed to read file, %s", err)
+		fmt.Printf("failed to read file, %s\n", err)
 	}
 
 	return lines
@@ -39,12 +44,12 @@ func LoadFirstInputLine(path string) string {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			fmt.Printf("failed to close file \"%s\"", path)
+			fmt.Printf("failed to close file \"%s\"\n", path)
 		}
 	}(file)
 
 	if err != nil {
-		fmt.Printf("failed to load input from \"%s\"", path)
+		fmt.Printf("failed to load input from \"%s\"\n", path)
 	}
 
 	scanner := bufio.NewScanner(file)

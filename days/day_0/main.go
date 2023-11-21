@@ -2,15 +2,18 @@ package day_0
 
 import (
 	"fmt"
-	"github.com/wlchs/advent_of_code_go_template/loader"
 	"sort"
 	"strconv"
 )
 
 // Run function of the daily challenge
-func Run() {
-	fmt.Printf("Part one: %v\n", Part1("days/day_0/input_1.txt"))
-	fmt.Printf("Part two: %v\n", Part2("days/day_0/input_2.txt"))
+func Run(input []string, mode int) {
+	if mode == 1 || mode == 3 {
+		fmt.Printf("Part one: %v\n", Part1(input))
+	}
+	if mode == 2 || mode == 3 {
+		fmt.Printf("Part two: %v\n", Part2(input))
+	}
 }
 
 // getElfCalories reads the input lines and returns a slice of calories for each elf
@@ -37,16 +40,14 @@ func getElfCalories(input []string) []int {
 }
 
 // Part1 solves the first part of the exercise
-func Part1(inputPath string) string {
-	input := loader.LoadInputLines(inputPath)
+func Part1(input []string) string {
 	calories := getElfCalories(input)
 	maxCalories := calories[0]
 	return strconv.Itoa(maxCalories)
 }
 
 // Part2 solves the second part of the exercise
-func Part2(inputPath string) string {
-	input := loader.LoadInputLines(inputPath)
+func Part2(input []string) string {
 	calories := getElfCalories(input)
 
 	topCalories := 0

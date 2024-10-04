@@ -16,9 +16,9 @@ Make sure you have Go >= 1.21.4 installed.
 git clone https://github.com/wlchs/advent_of_code_go_template
 ```
 
-### Solve the daily challenges.
+### Solving the daily challenges
 
-I've generated a separate directory in the repository for each advent calendar day: from the 1st until the 24th. Additionally, the `day_0`
+I've generated a separate directory in the repository for each advent calendar day: from the 1st until the 25th. Additionally, the `day_0`
 directory contains a solution for the first challenge from last year's competition.
 
 To solve a daily challenge, navigate to the corresponding day and implement the solution. I've prepared two methods for each day, `Part1`
@@ -59,10 +59,12 @@ func Part1(input []string) string {
 // Part2 solves the second part of the exercise
 func Part2(input []string) string {
     calories := getElfCalories(input)
+
     topCalories := 0
-    for i := 0; i < 3; i++ {
-        topCalories += calories[i]
+    for _, i := range calories[:3] {
+        topCalories += i
     }
+
     return strconv.Itoa(topCalories)
 }
 

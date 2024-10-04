@@ -51,8 +51,8 @@ func Part2(input []string) string {
 	calories := getElfCalories(input)
 
 	topCalories := 0
-	for i := 0; i < 3; i++ {
-		topCalories += calories[i]
+	for _, i := range calories[:3] {
+		topCalories += i
 	}
 
 	return strconv.Itoa(topCalories)

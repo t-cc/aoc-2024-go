@@ -2,6 +2,9 @@ package day_03
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
 )
 
 // Run function of the daily challenge
@@ -16,7 +19,24 @@ func Run(input []string, mode int) {
 
 // Part1 solves the first part of the exercise
 func Part1(input []string) string {
-	return ""
+	var sum = 0
+	re := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
+	for _, line := range input {
+		for _, m := range re.FindAllString(line, -1) {
+			numbers := strings.Split(m[:len(m)-1][4:], ",")
+			a, err := strconv.Atoi(numbers[0])
+			if err != nil {
+				panic(err)
+			}
+			b, err := strconv.Atoi(numbers[1])
+			if err != nil {
+				panic(err)
+			}
+			sum += a * b
+		}
+	}
+
+	return strconv.Itoa(sum)
 }
 
 // Part2 solves the second part of the exercise

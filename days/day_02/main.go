@@ -16,60 +16,65 @@ func Run(input []string, mode int) {
 	}
 }
 
+func lineStringToInt(lineStr string) []int {
+	var line []int
+	for _, char := range strings.Split(lineStr, " ") {
+		number, err := strconv.Atoi(char)
+		if err != nil {
+			panic(err)
+		}
+		line = append(line, number)
+	}
+	return line
+}
+
+func IsValidRow(row []int) bool {
+	isDecreasing := row[0] > row[1]
+
+	if isDecreasing {
+		isSafe := true
+		for index, number := range row {
+			if index > 0 {
+				diff := number - row[index-1]
+				if diff > 0 {
+					// different directions
+					isSafe = false
+					break
+				}
+				if diff < -3 || diff == 0 {
+					isSafe = false
+					break
+				}
+			}
+		}
+		return isSafe
+	} else {
+		isSafe := true
+		for index, number := range row {
+			if index > 0 {
+				diff := number - row[index-1]
+				if diff < 0 {
+					// different directions
+					isSafe = false
+					break
+				}
+				if diff > 3 || diff == 0 {
+					isSafe = false
+					break
+				}
+			}
+		}
+		return isSafe
+	}
+}
+
 // Part1 solves the first part of the exercise
 func Part1(input []string) string {
 	safeCount := 0
 
 	for _, lineStr := range input {
-		var line = []int{}
-		for _, char := range strings.Split(lineStr, " ") {
-			number, err := strconv.Atoi(char)
-			if err != nil {
-				panic(err)
-			}
-			line = append(line, number)
-		}
-
-		isDecreasing := line[0] > line[1]
-
-		if isDecreasing {
-			isSafe := true
-			for index, number := range line {
-				if index > 0 {
-					diff := number - line[index-1]
-					if diff > 0 {
-						// different directions
-						isSafe = false
-						break
-					}
-					if diff < -3 || diff == 0 {
-						isSafe = false
-						break
-					}
-				}
-			}
-			if isSafe {
-				safeCount++
-			}
-		} else {
-			isSafe := true
-			for index, number := range line {
-				if index > 0 {
-					diff := number - line[index-1]
-					if diff < 0 {
-						// different directions
-						isSafe = false
-						break
-					}
-					if diff > 3 || diff == 0 {
-						isSafe = false
-						break
-					}
-				}
-			}
-			if isSafe {
-				safeCount++
-			}
+		if IsValidRow(lineStringToInt(lineStr)) {
+			safeCount++
 		}
 	}
 
@@ -81,53 +86,23 @@ func Part2(input []string) string {
 	safeCount := 0
 
 	for _, lineStr := range input {
-		var line = []int{}
-		for _, char := range strings.Split(lineStr, " ") {
-			number, err := strconv.Atoi(char)
-			if err != nil {
-				panic(err)
-			}
-			line = append(line, number)
-		}
-
-		isDecreasing := line[0] > line[1]
-
-		if isDecreasing {
-			errorCount := 0
-			for index, number := range line {
-				if index > 0 {
-					diff := number - line[index-1]
-					if diff > 0 {
-						// different directions
-						errorCount++
-					}
-					if diff < -3 || diff == 0 {
-						errorCount++
-						break
-					}
-				}
-			}
-			if errorCount <= 1 {
-				safeCount++
-			}
+		line := lineStringToInt(lineStr)
+		// fmt.Printf("%v\n", line)
+		if IsValidRow(line) {
+			safeCount++
 		} else {
-			errorCount := 0
-			for index, number := range line {
-				if index > 0 {
-					diff := number - line[index-1]
-					if diff < 0 {
-						// different directions
-						errorCount++
-					}
-					if diff > 3 || diff == 0 {
-						errorCount++
-					}
+			for i := range line {
+				var tmp = make([]int, len(line))
+				copy(tmp, line)
+				var newLine = append(tmp[:i], tmp[i+1:]...)
+				// fmt.Printf("try: %v (%v)\n", newLine, IsValidRow(newLine))
+				if IsValidRow(newLine) {
+					safeCount++
+					break
 				}
 			}
-			if errorCount <= 1 {
-				safeCount++
-			}
 		}
+
 	}
 
 	return strconv.Itoa(safeCount)

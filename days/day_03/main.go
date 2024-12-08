@@ -41,5 +41,29 @@ func Part1(input []string) string {
 
 // Part2 solves the second part of the exercise
 func Part2(input []string) string {
-	return ""
+	sum := 0
+	enabled := true
+	re := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)|don't\(\)|do\(\)`)
+	for _, line := range input {
+		for _, m := range re.FindAllString(line, -1) {
+			if m == "don't()" {
+				enabled = false
+			} else if m == "do()" {
+				enabled = true
+			} else if enabled {
+				numbers := strings.Split(m[:len(m)-1][4:], ",")
+				a, err := strconv.Atoi(numbers[0])
+				if err != nil {
+					panic(err)
+				}
+				b, err := strconv.Atoi(numbers[1])
+				if err != nil {
+					panic(err)
+				}
+				sum += a * b
+			}
+		}
+	}
+
+	return strconv.Itoa(sum)
 }

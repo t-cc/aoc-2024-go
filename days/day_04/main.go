@@ -16,14 +16,6 @@ func Run(input []string, mode int) {
 	}
 }
 
-func reverse(numbers []string) []string {
-	newNumbers := make([]string, 0, len(numbers))
-	for i := len(numbers) - 1; i >= 0; i-- {
-		newNumbers = append(newNumbers, numbers[i])
-	}
-	return newNumbers
-}
-
 func buildMatrix(input []string) [][]string {
 	var matrix [][]string
 	for _, line := range input {
@@ -31,11 +23,6 @@ func buildMatrix(input []string) [][]string {
 		matrix = append(matrix, lineArray)
 	}
 	return matrix
-}
-
-func searchForMAS(matrix [][]string, x int, y int) int {
-	return 0
-
 }
 
 var DIRECTIONS = [8][3][2]int{
@@ -82,7 +69,46 @@ func Part1(input []string) string {
 	return strconv.Itoa(total)
 }
 
+var DIRECTIONS_X = [4][2][2]int{
+	{{-1, -1}, {01, 01}},
+	{{01, 01}, {-1, -1}},
+	{{01, -1}, {-1, 01}},
+	{{-1, 01}, {01, -1}},
+}
+
 // Part2 solves the second part of the exercise
 func Part2(input []string) string {
-	return ""
+	total := 0
+
+	matrix := buildMatrix(input)
+
+	xMax := len(input[0])
+	yMax := len(input)
+	for x := 0; x < xMax; x++ {
+		for y := 0; y < yMax; y++ {
+			start := matrix[y][x]
+			if start == "A" {
+				// test for MAS
+				inThisX := 0
+				for _, row := range DIRECTIONS_X {
+					list := []string{}
+					for _, point := range row {
+						_y := point[0] + y
+						_x := point[1] + x
+						if _x >= 0 && _x < xMax && _y >= 0 && _y < yMax {
+							list = append(list, matrix[_y][_x])
+						}
+					}
+					if len(list) == 2 && list[0] == "M" && list[1] == "S" {
+						inThisX++
+					}
+				}
+				if inThisX >= 2 {
+					total++
+				}
+			}
+		}
+	}
+
+	return strconv.Itoa(total)
 }
